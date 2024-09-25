@@ -1,0 +1,255 @@
+# 随机变量及其概率分布
+
+R语言内有专门的函数来处理概率及其分布函数：
+
+- d = 概率密度函数(density)，即离散型随机变量中的P(X=x)和连续型随机变量函数中的f(x)
+- p = 分布函数(distriution function), 即F(x)，根据x值求累计概率，例如已知a,求P(x≤a)=?
+- q = 分位数函数(quantile function) 是分布函数的反面，利用一致概率，求累计概率对应的x位点，已知P(x≤a)，求a=?
+- r = 生成随机数(random),例如rnorm(50,m = 10,sd=1)生成均值10，标准差为1的50个值。
+
+所有的分布也对应有相应的语言
+
+- 二项分布 = binom
+- 泊松分布 = pois
+- 均匀分布 = unif
+- 正态分布 = norm
+- t分布    = t
+- $\chi^2$分布 = chisq
+- F分布    = f
+
+两者相互组合，就能够得到其相应的值。例如：
+
+
+## 二项分布
+
+其命令形式是：
+```{r,eval=FALSE}
+dbinom(x, size, prob)
+```
+
+某人正在打保龄球，他击倒所有球的概率是0.3，如果投掷10次，利用R语言求响应的概率：
+
+
+1. 投掷10次，只有1次击倒所有球的概率：
+
+```{r}
+dbinom(1,10,0.3)
+```
+
+这里的d指的就是概率密度函数P(x)。
+
+2. 如果求x≤3时的概率，则用：
+
+```{r}
+pbinom(3,10,0.3)
+```
+
+如果画它的概率密度图，则用下列的命令：
+
+```{r}
+# 生成x数值序列，从-3到3，生成100个数值：
+x <- seq(0,100,1)
+x
+
+# d表示概率密度函数，binom表示二项分布，因此dbinom生成的是每个x值所对应的二项分布的p(x)值：
+y <- dbinom(x,100,0.3)
+
+# 对以上两项内容进行作图显示：
+plot(x,y,ylab="P(x)")
+```
+
+## 泊松分布
+
+其命令形式是：
+```{r,eval=FALSE}
+dpois(x, lambda)
+```
+
+
+```{r}
+# 生成x数值序列，从-3到3，生成100个数值：
+x <- seq(0,20,1)
+x
+
+
+# d表示概率密度函数，pois表示泊松分布，因此dpois生成的是每个x值所对应的的p(x)值：
+y <- dpois(x,lambda =  4)
+
+# 对以上两项内容进行作图显示：
+plot(x,y,ylab="P(x)")
+```
+
+## 均匀分布
+
+其命令形式是：
+```{r,eval=FALSE}
+dunif(x, min = , max = )
+```
+
+
+```{r}
+# 生成x数值序列，从-3到3，生成100个数值：
+x <- seq(0,20,0.1)
+x
+
+
+# d表示概率密度函数，unif表示均匀分布，因此dunif生成的是每个x值所对应的p(x)值：
+y <- dunif(x,min = 5, max = 15)
+
+# 对以上两项内容进行作图显示：
+plot(x,y,ylab="P(x)")
+```
+
+## 正态分布
+
+其命令形式是：
+```{r,eval=FALSE}
+dnorm(x)
+```
+此时做的是标准正态分布，即默认为N(0,1)
+
+计算x < 1.95的概率：
+```{r}
+pnorm(1.95)
+```
+计算P = 0.975所对应的x的位点：
+
+```{r}
+qnorm(0.975)
+```
+
+rnorm(50,m = 10,sd=1)生成均值10，标准差为1的50个值
+
+```{r}
+rnorm(50, m = 10,sd=1)
+```
+
+
+```{r}
+# 生成x数值序列，从-3到3，生成100个数值：
+x <- pretty(c(-3,3),100)
+x
+
+# d表示概率密度函数，norm表示正态分布，因此dnorm生成的是每个x值所对应的正态分布的f(x)值：
+y <- dnorm(x)
+
+# 对以上两项内容进行作图显示：
+plot(x,y)
+```
+
+## t分布
+
+其命令形式是：
+```{r,eval=FALSE}
+dt(x,df,ncp,log = FALSE)
+pt(q,df,ncp,lower.tail = TRUE,log.p = FALSE)
+qt(p,df,ncp,lower.tail = TRUE,log.p = FALSE)
+rt(n,df,ncp)
+```
+这里面的参数含义是：
+
+- x: x的取值
+- p： 概率的取值
+- df: t分布的自由度
+- ncp: 非中心参数$\delta$,如果忽略，那么t分布就是中心对称的
+- log.p：逻辑值，如果为TRUE，那么概率P是以log(P)的形式给定的；
+- lower.tail: 逻辑值，如果未TRUE，那么概率展示的是P[X ≤ x].
+
+举例：
+
+```{r}
+# 利用rt随机生成t值
+rt(n = 100, df = 10)
+
+# 做t的概率密度函数图
+x <- seq(-10, 10, 0.1)
+y <- dt(x,df = 10)
+plot(x,y)
+
+# 利用x值计算对应的t的累计概率
+pt(1,df = 10)
+pt(1, df = 10, lower.tail = FALSE)
+
+# 利用累计概率，计算对应的x的值
+qt(0.95, df = 10)
+
+```
+
+## $\chi^2$分布
+
+其命令形式是：
+```{r,eval=FALSE}
+dchisq(x,df,ncp = 0,log = FALSE)
+pchisq(q,df,ncp = 0,lower.tail = TRUE,log.p = FALSE)
+qchisq(p,df,ncp = 0,lower.tail = TRUE,log.p = FALSE)
+rchisq(n,df,ncp = 0)
+```
+这里面的参数含义是：
+
+- x: x的取值
+- p： 概率的取值
+- df: 卡方分布的自由度
+- ncp: 非中心参数$\delta$,如果忽略，那么卡方分布就是中心对称的
+- log.p：逻辑值，如果为TRUE，那么概率P是以log(P)的形式给定的；
+- lower.tail: 逻辑值，如果未TRUE，那么概率展示的是P[X ≤ x].
+
+举例：
+
+```{r}
+# 生成随机卡方值
+rchisq(n = 100, df = 10, ncp = 0)
+
+# 做卡方分布的概率密度函数图
+x <- seq(0, 30, 0.1)
+y <- dchisq(x,df = 10)
+plot(x,y)
+
+# 利用x值计算对应的卡方的累计概率
+pchisq(1,df = 10)
+pchisq(1, df = 10, lower.tail = FALSE)
+
+# 利用累计概率，计算对应的x的值
+qchisq(0.95, df = 10)
+
+```
+
+
+
+## F 分布
+
+其命令形式是：
+```{r,eval=FALSE}
+df(x,df1,df2,ncp = 0,log = FALSE)
+pf(q,df1,df2,ncp = 0,lower.tail = TRUE,log.p = FALSE)
+qf(p,df1,df2,ncp = 0,lower.tail = TRUE,log.p = FALSE)
+rf(n,df1,df2,ncp = 0)
+```
+这里面的参数含义是：
+
+- x: x的取值
+- p： 概率的取值
+- df1,df2: F分布的两个自由度
+- ncp: 非中心参数$\delta$,如果忽略，那么F分布就是中心对称的
+- log.p：逻辑值，如果为TRUE，那么概率P是以log(P)的形式给定的；
+- lower.tail: 逻辑值，如果未TRUE，那么概率展示的是P[X ≤ x].
+
+举例：
+
+```{r}
+# 生成随机F值
+rf(n = 100, df1 = 1, df2 = 10, ncp = 0)
+
+# 做F分布的概率密度函数图
+x <- seq(0, 30, 0.1)
+y <- df(x,df1 = 1, df2 = 10)
+plot(x,y)
+
+# 利用x值计算对应的F的累计概率
+pf(1,df1 = 1, df2 = 10)
+pf(1, df1 = 1, df2 = 10, lower.tail = FALSE)
+
+# 利用累计概率，计算对应的x的值
+qf(0.95, df1 = 1, df2 = 10)
+
+```
+

@@ -1,0 +1,109 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{book}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={生态学研究方法},
+  pdfauthor={Yin Xin},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{生态学研究方法}
+\author{Yin Xin}
+\date{2024-09-25}
+
+\begin{document}
+\frontmatter
+\maketitle
+
+\mainmatter
+\chapter{介绍}\label{ux4ecbux7ecd}
+
+R是一款开源的统计编程语言，它的安装地址是\url{https://cloud.r-project.org}，该软件每年会更新几次，因此需要经常手动更新。
+
+Rstudio是一个整合的开发环境、或者IDE。它是专门为R服务的，可以从以下网址下载：\url{https://posit.co/download/rstudio-desktop/}
+
+\section{软件包}\label{ux8f6fux4ef6ux5305}
+
+大量的R的算法不是通过基本功能来实现的，而是通过软件包来实现的。一个R软件包就是各种函数、数据和文档的集合。它拓展了R的基本功能。要想成功运用R，一个基本的能力就是能够用好这些软件包。这是所有软件包的地址\url{https://cloud.r-project.org/web/packages/available_packages_by_name.html}.
+
+\begin{itemize}
+\item
+  最重要的一个软件包就是''ggplot2''\url{https://cloud.r-project.org/web/packages/ggplot2/index.html}.这是一个作图软件包，能够满足我们所有的作图需求。
+\item
+  BiodiversityR: Package for Community Ecology and Suitability
+  Analysis。\url{https://cloud.r-project.org/web/packages/BiodiversityR/index.html}
+\item
+  Cati: Community Assembly by Traits: Individuals and Beyond Detect and
+  quantify community assembly processes using trait values of
+  individuals or populations, the T-statistics and other metrics, and
+  dedicated null
+  models.\url{https://cloud.r-project.org/web/packages/cati/index.html}
+\item
+  vegan: Community Ecology Package.Ordination methods, diversity
+  analysis and other functions for community and vegetation
+  ecologists.\url{https://cloud.r-project.org/web/packages/vegan/index.html}
+\item
+  Bioconductor:
+  生信数据分析整合包，需要利用BiocManager下载并使用\url{https://cloud.r-project.org/web/packages/BiocManager/index.html}。
+\end{itemize}
+
+\backmatter
+\end{document}

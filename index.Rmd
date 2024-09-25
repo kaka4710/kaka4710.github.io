@@ -1,0 +1,33 @@
+---
+title: "生态学研究方法"
+author: "Yin Xin"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography:
+- book.bib
+- packages.bib
+description: |
+  该内容主要用于R语言的介绍与利用.
+link-citations: yes
+---
+
+# 介绍
+
+R是一款开源的统计编程语言，它的安装地址是<https://cloud.r-project.org>，该软件每年会更新几次，因此需要经常手动更新。
+
+Rstudio是一个整合的开发环境、或者IDE。它是专门为R服务的，可以从以下网址下载：<https://posit.co/download/rstudio-desktop/>
+
+## 软件包
+
+大量的R的算法不是通过基本功能来实现的，而是通过软件包来实现的。一个R软件包就是各种函数、数据和文档的集合。它拓展了R的基本功能。要想成功运用R，一个基本的能力就是能够用好这些软件包。这是所有软件包的地址<https://cloud.r-project.org/web/packages/available_packages_by_name.html>.
+
+-   最重要的一个软件包就是"ggplot2"<https://cloud.r-project.org/web/packages/ggplot2/index.html>.这是一个作图软件包，能够满足我们所有的作图需求。
+
+-   BiodiversityR: Package for Community Ecology and Suitability Analysis。<https://cloud.r-project.org/web/packages/BiodiversityR/index.html>
+
+-   Cati: Community Assembly by Traits: Individuals and Beyond Detect and quantify community assembly processes using trait values of individuals or populations, the T-statistics and other metrics, and dedicated null models.<https://cloud.r-project.org/web/packages/cati/index.html>
+
+-   vegan: Community Ecology Package.Ordination methods, diversity analysis and other functions for community and vegetation ecologists.<https://cloud.r-project.org/web/packages/vegan/index.html>
+
+-   Bioconductor: 生信数据分析整合包，需要利用BiocManager下载并使用<https://cloud.r-project.org/web/packages/BiocManager/index.html>。

@@ -1,0 +1,421 @@
+# **数据的输入与创建**
+
+## **数据创建**
+
+### **向量**
+        
+概念：用于存储数值型、字符型或逻辑型数据的一维数组。
+
+主要的类型有：
+
+- **数值型数据**
+```{r}
+a <- c(1, 2, 5, 3, 6, -2, 4)  
+a
+```
+
+- **复数型数据**
+```{r}
+b <- c(1+2i, 5+3i, 7+1i)   
+b
+```
+- **字符型数据**
+```{r}
+c <- c("one", "two", "three")   
+c
+```
+- **逻辑型数据**
+```{r}
+d <- c(TRUE, TRUE, TRUE)
+d
+```
+
+**注意：**单个向量中的数据必须是相同的类型(数值型、字符型或逻辑型)。      
+        
+命名需要注意的事项：
+
+- (1)变量名不能以数字开头，必须用英文字母开头，但是可以用数字结尾。
+
+- (2)R区分大小写，因此Data和data两个对象名是不同的。
+
+- (3)在为对象起名的时候，不能使用保留字，保留字主要包括:if，else， repeat，while，function， for
+in，next， break，TRUE，FALSE，NULL，Inf，NaN，NA等。保留字主要涉及程序流程控制和特殊的变量类型等。
+
+**创建重复的向量**
+
+```{r}
+rep(2:5, 2) # 等价于  rep(2:5, times = 2) 
+rep(2:5, rep(2, 4))    
+rep(1:3, times = 4, each = 2)  
+paste(c("X","Y"), 1:10, sep = "-")  #不规则
+rep(factor(LETTERS[1:3]), 5) 
+```
+
+**向量中元素的访问**：
+
+```{r}
+a <- c(1, 2, 5, 3, 6, -2, 4) 
+#  向量 a 中第三个数据 
+a[3]
+#  向量 a 中第一、三、五个数据 
+a[c(1, 3, 5)] 
+#  向量 a 中第二到第六个数据 
+a[2:6]    
+#  向量 a 中数值大于 3 的所有数据 
+a[a>3]
+# 去掉第一个值 
+a[-1]    
+#  去掉前三个值 
+a[-1:-3]
+
+```
+
+
+
+## **矩阵**
+
+概念:一个二维数组
+
+**创建一个 2×2 的矩阵 **
+```{r}
+matrix(1:4, nrow = 2, ncol = 2)    
+```
+**生成单位阵**：
+
+```{r}
+diag(3)   
+```
+**把矩阵给定一个名字**：
+
+```{r}
+mat1<-matrix(1:12,3,4, byrow=T)
+mat1
+mat2<-matrix(1:12,3,4, byrow=F)
+mat2
+
+mat3<-matrix(1:12,3,4)
+mat3
+```
+这里mat1里面的“byrow=T”表示按照行来创建，mat2里面的“byrow=F”表示不按照行来创建。mat3与mat2是一样的，说明这个命令默认的参数就是“byrow=F”
+
+
+**矩阵子集数据的提取**：
+
+```{r}
+x <- matrix(1:6, 2, 3) 
+x[2,2]   # 第二行、第 2 列的元素 
+x[2, ]  # 第二行的所有元素 
+x[ ,2]   # 第 2 列的所有元素 
+x[2, c(2, 3)]  # 第二行中第 2、3 列的元素 
+```
+
+## **数据框**
+使用函数 data.frame( )创建数据框： 
+**mydata <- data.frame(col1, col2, col3, …) **
+其中的列向量 col1, col2, col3,…可以是任何数据类型。
+
+```{r}
+patientID <- c(1, 2, 3, 4) 
+age <- c(25, 34, 28, 52) 
+diabetes <- c("Type1", "Type2", "Type1", "Type1") 
+status <- c("Poor", "Improved", "Excellent", "Poor") 
+patientdata <- data.frame(patientID, age, diabetes, status) 
+patientdata
+
+patientdata[1:2] #  第 1、2 列的所有元素 
+patientdata$age    #    "$"符合用于选取一个指定的变量。 
+
+patientdata[["age"]]
+
+```
+
+## **列表**
+R 数据类型中最为复杂的一种数据结构。
+列表就是包含任何类型的对象，可以是若干向量、矩阵、数据框，甚至其他列表的组合。
+通过函数 list( )来创建： 
+    **mylist <- list(object1, object2, …) **
+         其中的对象 object1, object2, …，可以是向量、矩阵、数据框或列表的任何一种结构。
+
+创建列表:
+```{r}
+g <- "My First List" 
+g
+h <- c(25, 26, 18, 39) 
+h
+j <- matrix(1:10, nrow = 5) 
+j
+k <- c("one", "two", "three")
+k
+mylist <- list(title = g, ages = h, j, k)
+mylist 
+
+```
+
+#### **因子**
+概念：是一种向量对象，它给自己的组件指定了一个离散的分类(分组)，它的组件由其他等长的向量组成。
+用函数 factor( )创建一个因子，levels 按序(字母序或数值序)排列
+
+
+为 province 创建因子 
+```{r}
+province <- c("四川", "湖南", "江苏", "四川", "四川", "四川", "湖南", "江苏", "湖南", "江苏")  
+pf <- factor(province)    #  创建 province 的因子 pf 
+pf 
+```
+
+## **数据输入**
+
+### **键盘输入**
+
+```{r,eval=FALSE}
+mydata <- data.frame(age = numeric(0),                       
+                    gender = character(0), weight = numeric(0) ) 
+mydata <- edit(mydata)    #  输入或修改 mydata 中的数据
+
+mydata
+
+```
+
+
+### **csv文件**
+
+
+```{r,eval=FALSE}
+mydata2 <- read.table( file = "D:/dbh.csv", header = T, sep = "," ) 
+mydata3 <- read.csv( file = "D:/dbh.csv", header = T) 
+
+```
+
+### **网络中读取表格或CSV文件**。
+
+
+```{r,eval=FALSE}
+tbl<-read.csv("http://www.example.com/download/data.csv")
+tbl2<-read.table("ftp://ftp.example.com/download/data.txt")
+```
+
+### **导入Excel数据**
+
+
+```{r,eval=FALSE}
+library(RODBC)
+channel <- odbcConnectExcel( "d:/test.xls" )
+mydata <- sqlFetch( channel, "Sheet1" )
+
+channel2 <- odbcConnectExcel2007( "d:/test.xlsx" )
+mydata2 <- sqlFetch( channel, "Sheet1" )
+
+```
+
+### **导入SAS数据**
+
+
+```{r,eval=FALSE}
+library(RODBC)
+library(foreign)
+mydata <- read.sas( "d:/test.ssd" )
+library(Hmisc)
+data <- sas.get( "D:/test.ssd" )
+
+```
+
+### **导入SPSS数据**
+
+
+```{r,eval=FALSE}
+library(foreign)
+mydata <- read.spss( "d:/test.sav" )
+```
+
+
+
+## **数据存储**
+
+创建待用数据：
+```{r}
+
+df<-data.frame(obs = c(1, 2, 3), treat = c("A", "B", "A"), weight = c(2.3, NA, 9))
+df
+
+```
+
+### **write.table() 保存为txt文件**
+
+
+```{r,eval=FALSE}
+
+write.table( df , file = "D:/Rdata/fg.txt", row.names = F, quote = F )
+
+
+```
+
+### **write.csv() 保存为CSV文件**
+
+
+```{r,eval=FALSE}
+
+write.csv( df , file = "D:/Rdata/fg.csv" )
+
+
+```
+
+### **save() 保存为R格式文件**
+
+
+```{r,eval=FALSE}
+
+save( df , file = "D:/Rdata/fg.Rdata" )
+
+```
+
+
+## **数据的操作**
+
+### **变量创建与删除**
+
+```{r}
+mydata <- data.frame( x1 = c(2, 2, 6, 4), 
+				x2 = c(3, 4, 2, 8) )
+mydata
+#  方法一
+mydata$sum <- mydata$x1 + mydata$x2
+mydata
+mydata$mean <- (mydata$x1 + mydata$x2)/2
+mydata
+#  方法二
+mydata <- transform(     mydata,
+			              sum = x1 + x2,
+			              mean = (x1 + x2)/2 )
+mydata
+
+# 变量的删除
+mydata$mean <- NULL 
+mydata
+
+```
+### **变量重命名**
+
+```{r}
+
+
+df <- mydata
+
+# 第一种方法：调用编辑器重命名
+fix(df)
+df
+# 第二种方法：使用函数 names( )重命名
+names(df)
+names(df)[1:2] <- c("A", "B")
+df
+
+
+```
+
+
+
+### **缺失值**
+
+- 缺失值：NA (Not Available，不可用)
+- 不可能出现的值：NaN(Not a Number，非数值)
+- 函数 is.na()可检测缺失值是否存在。
+
+```{r}
+x <- c(1:3, 5,7, NA, 9)
+sum(x) #  结果为 NA
+sum( x, na.rm = T ) #  结果为 27
+
+```
+
+
+### **数据类型转化**
+
+```{r}
+Rep <- c( 1:6 )           #    Rep 赋值
+is.numeric(Rep)        #  数值型判断：真
+is.factor(Rep)            #  因子判断：假
+Rep <- as.factor(Rep)     #  转换为因子
+is.factor(Rep)            #  因子判断：真
+
+```
+
+
+### **数据排序**
+
+- R 自带的 order(  )函数
+- plyr 程序包的 arrange(  )函数
+
+
+
+```{r}
+df <- data.frame (id = 1:4,
+weight = c(20, 27, 24, 22),
+size = c("small", "large", "medium", "large"))
+
+# R 自带的 order( )函数
+df[order(df$weight), ]
+df[order(df$size,df$weight), ]
+df[order(df$size,-df$weight), ]
+
+# plyr 包的 arrange( )函数
+library(plyr)
+arrange(df, weight)
+arrange(df, size, weight)
+arrange(df, size, -weight)
+
+
+```
+
+
+### **数据合并**
+
+- **列合并**
+
+```{r}
+#  创建数据框 dataA
+dataA <- read.table( header = T, text = '
+storyid title
+1 lions
+2 tigers
+3 bears
+')
+#  创建数据框 dataB
+dataB <- read.table( header = T, text = '
+subject storyid rating
+1 1 6.7
+1 2 4.5
+2 2 3.3
+2 1 5.2
+')
+
+#  合并数据框 dataA, dataB
+merge(dataA, dataB, "storyid")
+
+```
+
+- **行合并**
+
+ total <- rbind(dataA, dataB)
+         注意：dataA 与 dataB 需含有一样的变量，但排列的顺序可以不同。
+
+```{r}
+dfA <- data.frame( Subject = c(1, 1, 2, 2), Response = c("X", "X", "X", "X") )
+dfA
+dfB <- data.frame( Subject = c(1, 2, 3), Response = c("Z", "Y", "Z") )
+dfB
+df <- rbind(dfA, dfB)
+df
+dfA$Coder <- "A"
+dfB$Coder <- "B"
+df <- rbind(dfA, dfB)
+df
+```
+
+### **数据探索**
+```{r}
+dim(iris)      	 #  数据集的维度，有多少行多少列？
+names(iris)    #  数据有哪些列？
+str(iris)        	 #  数据的结构如何？
+iris[1:5, ]      	 #  查看数据的前 5 行
+head(iris)      #  查看数据的前 6 行
+tail(iris)      	 #  查看数据的最后 6 行
+```

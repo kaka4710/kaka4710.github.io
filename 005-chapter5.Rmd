@@ -1,0 +1,67 @@
+# 参数估计
+
+## 均值的估计（大样本）或（小样本但$\sigma^2$已知）
+
+```{r}
+Get.Mu_CI <- function(x,alpha,sigma = NULL){
+     n <- length(x)
+     if (n <= 30 ){
+          if (is.null(sigma)){
+               cat("小样本，且σ未知","\n")
+               sd.x <- sd(x)
+               CI1 <- mean(x)-qt(1-alpha/2,df = n-1 )*(sd.x/sqrt(n))
+               CI2 <- mean(x)+ qt(1-alpha/2,df = n-1)*(sd.x/sqrt(n))
+          }
+          else{
+               cat("小样本，但σ已知","\n")
+               sd.x <- sigma
+               CI1 <- mean(x)-qnorm(1-alpha/2)*(sd.x/sqrt(n))
+               CI2 <- mean(x)+ qnorm(1-alpha/2)*(sd.x/sqrt(n))
+          }
+          cat("该数据的均值置信区间是：[",CI1,",",CI2,"]",sep = "")
+     } 
+     else{
+          cat("大样本，或σ已知","\n")
+          if (is.null(sigma)){
+               sd.x <- sd(x)
+          }
+          else{
+               sd.x <- sigma
+          }
+          CI1 <- mean(x)-qnorm(1-alpha/2)*(sd.x/sqrt(n))
+          CI2 <- mean(x)+ qnorm(1-alpha/2)*(sd.x/sqrt(n))
+          cat("该数据的均值置信区间是：[",CI1,",",CI2,"]",sep = "")
+     }
+}
+
+
+
+x<-c(112.5,101.0,103.0,102.0,100.5,102.6,107.5,95,108.8,115.6,100,123.5,102,101.6,102.2,116.6,95.4,97.8,108.6,105.0,136.8,102.8,101.5,98.4,93.3)
+length(x)
+y<-c(1510,1520,1480,1500,1450,1480,1510,1520,1480,1490,1530,1510,1460,1460,1470,1470)
+Get.Mu_CI(x,alpha = 0.05,sigma=10)
+Get.Mu_CI(x,alpha = 0.05)
+Get.Mu_CI(y,alpha = 0.05)
+
+BSDA::z.test(x,sigma.x = 10 ,conf.level = 0.95)
+t.test(y)
+```
+
+
+## 方差的估计
+```{r}
+
+Get.Sigma_CI <- function(x,alpha){
+     n <- length(x)
+     CI1 <- (n-1)*(sd(x)^2)/qchisq(1-alpha/2,df = n-1)
+     CI2 <- (n-1)*(sd(x)^2)/qchisq(alpha/2,df = n-1)
+     cat("该数据的方差置信区间是：[",CI1,",",CI2,"]",sep = "")
+}
+x<-c(112.5,101.0,103.0,102.0,100.5,102.6,107.5,95,108.8,115.6,100,123.5,102,101.6,102.2,116.6,95.4,97.8,108.6,105.0,136.8,102.8,101.5,98.4,93.3)
+Get.Sigma_CI(x,0.05)
+```
+
+
+
+
+

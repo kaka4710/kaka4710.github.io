@@ -1,0 +1,30 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "生态学研究方法"
+  reader-mode: true
+  author: "X Yin"
+  date: "2024/9/25"
+  chapters:
+     - index.qmd
+     - 002-chapter2.qmd
+     - 003-chapter3.qmd  
+     - 004-chapter4.qmd
+     - 005-chapter5.qmd
+     - 005-chapter5.qmd
+     - 006-chapter6.qmd
+     - 007-chapter7.qmd
+     - 008-Anova.qmd
+     - 009-lineModel.qmd
+     - 010-Text.qmd
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+
+editor: visual
+

@@ -1,0 +1,240 @@
+# 相关回归分析
+
+## 相关分析
+采用R语言包自带的iris数据集，直接在R中打该名字，就可以看见完整数据，这里我们用str()函数来看该数据的基本形式：
+
+```{r}
+str(iris)
+```
+
+## 做散点图
+
+散点图可以观察数据的具体走势，由于最后一列是数据的列名，以此我们只选择1到4列的数据：iris[,1:4]，中括号内的逗号前表示行（在此为空，表示全选），逗号后表示列（1:4表示选择的是1到4列）。
+
+```{r}
+plot(iris[,1:4])
+```
+
+## 相关系数的计算
+以iris数据的第一列iris[,1]和第二列iris[,2]为例，可以用编写函数的方法计算：
+
+```{r}
+get_r <- function(x,y){
+    Sigma_xy <- sum((x-mean(x))*(y-mean(y)))
+    Sigma_x <- sqrt(sum((x-mean(x))^2))
+    Sigma_y <- sqrt(sum((y-mean(y))^2))
+    r <- Sigma_xy/(Sigma_x*Sigma_y)
+    r
+}
+get_r(iris[,1],iris[,2])
+
+
+```
+可以用R自带的协方差公式cov(x,y)和标准差公式sd(x),sd(y)来计算
+```{r}
+r <- cov(iris[,1],iris[,2])/(sd(iris[,1])*sd(iris[,2]))
+r
+```
+可以用R自带的相关系数计算公式来计算：
+
+```{r}
+r <- cor(iris[,1],iris[,2],method = "pearson")
+r
+```
+
+## 相关系数的检验
+
+```{r}
+Test_r <- function(x,y){
+    r <- cor(x,y,method = "pearson")
+    t <- abs(r)*sqrt((length(x)-2)/(1-r^2))
+    t_tri <- qt(0.975,df = length(x)-2)
+    if (abs(t) < t_tri){
+        cat("t的值为",t,"\n",
+            "t的临界值为",t_tri,"\n",
+            "接受原假设，两个变量之间的相关关系不显著")
+        } else{
+            cat("t的值为",t,"\n",
+                "t的临界值为",t_tri,"\n",
+                "拒绝原假设，两个变量之间的相关关系显著")
+}
+}
+
+Test_r(iris[,1],iris[,2])
+
+
+
+
+```
+## 相关分析作图
+
+```{r}
+library(PerformanceAnalytics)
+chart.Correlation(iris[,1:4],histogram = TRUE,pch = 19,method = "pearson")
+
+```
+
+
+## 一元回归实验输入输入
+
+通过手动输入的形式构建数据框：
+- Estrial：雌三醇；
+- Birth_weight：出生体重。
+
+实验数据如下：
+```{r}
+Estrial<-c(7,9,9,12,14,16,16,14,16,16,17,19,21,24,15,16,17,25,27,15,15,15,16,19,18,17,18,20,22,25,24)
+Birth_weight <-c(25,25,25,27,27,27,24,30,30,31,30,31,30,28,32,32,32,32,34,34,34,35,35,34,35,36,37,38,40,39,43)
+BirthData<-data.frame(Estrial,Birth_weight)
+BirthData
+```
+
+
+## 制作回归图
+
+
+```{r}
+lm.1<-lm(Birth_weight~Estrial,data = BirthData)
+plot(Birth_weight~Estrial,data = BirthData)
+abline(lm.1)
+text(10,36,"y = 21.52 + 0.608x")
+```
+
+
+
+
+## 回归系数计算
+在R中，x*y代表x的第一个值乘以y的第一个值，x的第二个值乘以y的第二个值...，所以得到的就是一组新的向量，可以尝试每个组成部分的具体算法：
+
+
+
+```{r}
+Get_lm.coef<-function(x,y){
+    β1 <- (length(x)*sum(x*y)-sum(x)*sum(y))/(length(x)*sum(x^2)-(sum(x)^2))
+    β0 <- mean(y)-β1*mean(x)
+    cat("β0 = ",β0,"\n",
+        "β1 = ",β1,"\n",
+        "方程为：y = ",β0,"+",β1,"x",sep = "")
+}
+Get_lm.coef(BirthData$Estrial, BirthData$Birth_weight)
+
+# 拆解：
+length(BirthData$Estrial)
+sum(BirthData$Estrial*BirthData$Birth_weight)
+sum(BirthData$Estrial)*sum(BirthData$Birth_weight)
+sum(BirthData$Estrial^2)
+sum(BirthData$Estrial)^2
+```
+
+
+### 方差分析的结果
+
+```{r}
+Get_F<-function(x,y,β1,β0){
+    hat_y <- β0 + β1*x
+    SSE <- sum((y - hat_y)^2)
+    SSR <- sum((hat_y-mean(y))^2)
+    MSR <- SSR/1
+    MSE <- SSE/(length(x)-2)
+    F <- MSR/MSE
+    F_cri <- qf(0.95,df1 = 1, df2 = length(x)-2)
+    p <- 1-pf(F,df1 = 1, df2 = length(x)-2)
+    if (F < F_cri){
+    cat("F的值为",F,"\n",
+        "F的临界值为",F_cri,"\n",
+        "接受原假设，两个变量之间的相关关系不显著",sep = "")
+    } else{
+        cat("F的值为",F,"\n",
+            "F的临界值为",F_cri,"\n",
+            "拒绝原假设，两个变量之间的相关关系显著","\n",
+            "p值为：",p,sep = "")
+}
+}
+Get_F(BirthData$Estrial, BirthData$Birth_weight,0.6081905,21.5234286)
+```
+
+使用R自带的语言实现：
+
+
+```{r}
+lm(BirthData$Birth_weight~BirthData$Estrial)|>summary()
+```
+
+
+### 系数的检验
+
+
+```{r}
+Test_β1 <- function(x,y,β1,β0){
+    hat_y <- β0 + β1 * x
+    SSE <- sum((y - hat_y)^2)
+    SSR <- sum((hat_y-mean(y))^2)
+    MSR <- SSR/1
+    MSE <- SSE/(length(x)-2)
+    S_β1 <- sqrt(MSE/sum((x-mean(x))^2))
+    t <- β1 / S_β1
+    t_cri <- qt(0.975,df = length(x)-2)
+    p <- 2*(1-pt(t,df = length(x)-2))
+    if (abs(t) < t_cri){
+        cat("t的值为",t,"\n",
+            "t的临界值为",t_cri,"\n",
+            "接受原假设，两个变量之间的回归关系不显著")
+        } else{
+            cat("t的值为",t,"\n",
+                "t的临界值为",t_cri,"\n",
+                "拒绝原假设，两个变量之间的回归关系显著","\n",
+                "p值为：",p)
+}
+}
+Test_β1(BirthData$Estrial,BirthData$Birth,0.6081905,21.5234286)
+```
+
+
+## R2的计算
+```{r}
+Get_R2<-function(x,y,β1,β0){
+    hat_y <- β0 + β1*x
+    SSE <- sum((y - hat_y)^2)
+    SSR <- sum((hat_y-mean(y))^2)
+    SST <- SSR + SSE
+    SST
+    R2 <- SSR / SST
+    R2
+}
+Get_R2(BirthData$Estrial, BirthData$Birth_weight,0.6081905,21.5234286)
+```
+
+## 多元回归
+
+```{r}
+lm.2<-lm(iris[,1]~iris[,2]+iris[,3]+iris[,4])
+summary(lm.2)
+```
+
+
+
+## 多重共线性的识别
+
+```{r}
+library(PerformanceAnalytics)
+chart.Correlation(iris[,1:4],histogram = TRUE,pch = 19,method = "pearson")
+```
+
+## 使用VIF判断
+
+这里使用的是car包的vif命令
+
+```{r}
+car::vif(lm.2)
+```
+从结果中可以看出，有较强的共线性
+
+## 构建全模型
+```{r}
+full.lm <- lm(iris[,1]~.,data = iris[,2:4])
+summary(full.lm)
+```
+```{r}
+step.model <-MASS::stepAIC(full.lm,direction = "both",trace = TRUE)
+summary(step.model)
+```
